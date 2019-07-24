@@ -10,14 +10,34 @@ import android.support.v7.widget.RecyclerView;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView commitList;
+    private SwipeRefreshLayout commitListRefresh;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // get views
-        RecyclerView commitList = findViewById(R.id.commit_list);
-        SwipeRefreshLayout commitListRefresh = findViewById(R.id.commit_list_refresh);
+        this.commitList = findViewById(R.id.commit_list);
+        this.commitListRefresh = findViewById(R.id.commit_list_refresh);
+
+        // set refresh listener for SwipeRefreshLayout
+        this.commitListRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                reloadCommitData();
+            }
+        });
+
+        // initial data load
+        reloadCommitData();
+    }
+
+    /**
+     * Reload commit data into the RecyclerView
+     */
+    private void reloadCommitData() {
 
     }
 }
