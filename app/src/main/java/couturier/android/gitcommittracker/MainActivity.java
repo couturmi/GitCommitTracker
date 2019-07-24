@@ -5,6 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.List;
+
+import couturier.android.gitcommittracker.api.GitHubService;
+import couturier.android.gitcommittracker.model.Commit;
+
 /**
  * Activity that will display the list of commits
  */
@@ -38,6 +43,14 @@ public class MainActivity extends AppCompatActivity {
      * Reload commit data into the RecyclerView
      */
     private void reloadCommitData() {
-
+        new GitHubService().getCommits(new GitHubService.OnRequestCompleted<List<Commit>>() {
+            @Override
+            public void onCompleted(List<Commit> commitList) {
+                // stop refresh animation
+                if(commitListRefresh.isRefreshing()) {
+                    commitListRefresh.setRefreshing(false);
+                }
+            }
+        });
     }
 }
