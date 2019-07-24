@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 // clear RecyclerView
                 commitRecyclerView.setAdapter(null);
-                // reload new data
+                // load new data
                 reloadCommitData();
             }
         });
@@ -51,10 +52,14 @@ public class MainActivity extends AppCompatActivity {
         new GitHubService().getCommits(new GitHubService.OnRequestCompleted<List<Commit>>() {
             @Override
             public void onCompleted(List<Commit> commitList) {
-                // assign adapter to RecyclerView
-                CommitItemAdapter itemAdapter = new CommitItemAdapter(commitList);
-                commitRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                commitRecyclerView.setAdapter(itemAdapter);
+                if(null != commitList) {
+                    // assign adapter to RecyclerView
+                    CommitItemAdapter itemAdapter = new CommitItemAdapter(commitList);
+                    commitRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    commitRecyclerView.setAdapter(itemAdapter);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                }
 
                 // stop refresh animation
                 if(commitListRefresh.isRefreshing()) {
